@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <title>Supercharged URL Shortener</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -11,34 +11,44 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 20px;
+            padding: 30px 20px;
         }
         .container {
             background: white;
             border-radius: 16px;
             padding: 40px;
             width: 100%;
-            max-width: 520px;
+            max-width: 720px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
         h1 {
             color: #333;
             font-size: 28px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         .subtitle {
             color: #777;
             margin-bottom: 28px;
             font-size: 14px;
         }
+        .badge {
+            display: inline-block;
+            background: #eef2ff;
+            color: #667eea;
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+            font-weight: 600;
+        }
         .form-group {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
         }
-        input[type="url"], input[type="text"] {
+        .form-group input[type="text"] {
             flex: 1;
             padding: 12px 16px;
             border: 2px solid #e0e0e0;
@@ -47,8 +57,32 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        input:focus {
+        .form-group input:focus {
             border-color: #667eea;
+        }
+        .custom-code-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #666;
+        }
+        .custom-code-group input {
+            flex: 1;
+            max-width: 180px;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .custom-code-group input:focus {
+            border-color: #667eea;
+        }
+        .custom-code-group label {
+            white-space: nowrap;
         }
         button {
             padding: 12px 24px;
@@ -64,6 +98,16 @@
         }
         button:hover { background: #5a6fd6; }
         button:active { transform: scale(0.97); }
+        button.danger {
+            background: #e74c3c;
+        }
+        button.danger:hover {
+            background: #c0392b;
+        }
+        button.small {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
         .result-box {
             margin-top: 20px;
             padding: 16px;
@@ -112,24 +156,92 @@
             padding-top: 16px;
         }
         .url-list h3 {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 8px;
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 12px;
         }
-        .url-list ul {
-            list-style: none;
+        .url-card {
+            background: #fafbfc;
+            border: 1px solid #eef0f2;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            transition: box-shadow 0.2s;
         }
-        .url-list li {
-            padding: 6px 0;
-            font-size: 13px;
-            border-bottom: 1px solid #f5f5f5;
-            word-break: break-all;
+        .url-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
-        .url-list li code {
+        .url-card .code-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .url-card .code {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 15px;
+        }
+        .url-card .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .url-card .actions a, .url-card .actions button {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .url-card .actions .btn-visit {
+            background: #eef2ff;
             color: #667eea;
         }
-        .url-list li span {
-            color: #999;
+        .url-card .actions .btn-visit:hover {
+            background: #dde4ff;
+        }
+        .url-card .actions .btn-qr {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .url-card .actions .btn-qr:hover {
+            background: #d0ecd1;
+        }
+        .url-card .actions .btn-delete {
+            background: #fdecea;
+            color: #c0392b;
+        }
+        .url-card .actions .btn-delete:hover {
+            background: #f5d0cd;
+        }
+        .url-card .original-url {
+            color: #888;
+            font-size: 13px;
+            word-break: break-all;
+            margin-bottom: 6px;
+        }
+        .url-card .stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #aaa;
+        }
+        .url-card .stats span {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .url-card .stats .click-count {
+            color: #667eea;
+            font-weight: 600;
         }
         .footer {
             margin-top: 24px;
@@ -137,17 +249,49 @@
             font-size: 12px;
             color: #aaa;
         }
+        .api-section {
+            margin-top: 28px;
+            border-top: 1px solid #eee;
+            padding-top: 16px;
+        }
+        .api-section h3 {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .api-section code {
+            display: block;
+            background: #f5f7fa;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+            border: 1px solid #eef0f2;
+        }
+        .api-section .endpoint {
+            color: #667eea;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔗 URL Shortener</h1>
-        <p class="subtitle">Paste a long URL and get a short, shareable link</p>
+        <h1>🔗 Supercharged URL Shortener</h1>
+        <p class="subtitle">
+            Shorten URLs with custom aliases • Analytics • QR codes • REST API
+            <span class="badge">v2.0</span>
+        </p>
 
         <form method="POST">
             <div class="form-group">
                 <input type="text" name="url" placeholder="https://example.com/very/long/url" required>
                 <button type="submit">Shorten</button>
+            </div>
+            <div class="custom-code-group">
+                <label>Custom code (optional):</label>
+                <input type="text" name="custom_code" placeholder="e.g. my-link" maxlength="32">
+                <span>leave blank for auto-generated</span>
             </div>
         </form>
 
@@ -161,27 +305,71 @@
             <div class="short-url">
                 <input type="text" id="shortUrl" value="{{ short_url }}" readonly>
                 <button class="copy-btn" onclick="copyUrl()">Copy</button>
+                {% if last_code %}
+                <a href="{{ url_for('qr_code', code=last_code) }}" target="_blank" style="text-decoration:none;">
+                    <button class="copy-btn" style="background:#2e7d32;padding:8px 14px;font-size:13px;">📱 QR</button>
+                </a>
+                {% endif %}
             </div>
         </div>
         {% endif %}
 
-        {% if urls %}
+        {% if urls is not none and urls|length > 0 %}
         <div class="url-list">
             <h3>📋 All Shortened URLs ({{ urls|length }})</h3>
-            <ul>
-                {% for code, original in urls %}
-                <li>
-                    <code>/short/{{ code }}</code>
-                    <span>→</span>
-                    {{ original }}
-                </li>
-                {% endfor %}
-            </ul>
+            {% for code, entry in urls %}
+            <div class="url-card">
+                <div class="code-row">
+                    <div>
+                        <span class="code">/short/{{ code }}</span>
+                        <span style="color:#ccc;margin:0 6px;">→</span>
+                        <span class="original-url" style="display:inline;font-size:13px;">{{ entry['url'] }}</span>
+                    </div>
+                    <div class="actions">
+                        <a href="{{ url_for('redirect_url', code=code) }}" target="_blank" class="btn-visit">🔗 Visit</a>
+                        <a href="{{ url_for('qr_code', code=code) }}" target="_blank" class="btn-qr">📱 QR</a>
+                        <form method="POST" action="{{ url_for('delete_url', code=code) }}" style="display:inline;" onsubmit="return confirm('Delete this short URL?')">
+                            <button type="submit" class="btn-delete">🗑️ Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="stats">
+                    <span>📅 {{ entry['created'][:10] if entry.get('created') else 'unknown' }}</span>
+                    <span>👁️ <span class="click-count">{{ entry.get('clicks', 0) }}</span> clicks</span>
+                    {% if entry.get('last_access') %}
+                    <span>⏰ Last: {{ entry['last_access'][:19] }}</span>
+                    {% else %}
+                    <span>⏰ Never visited</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% elif urls is not none %}
+        <div class="url-list">
+            <h3>📋 No URLs shortened yet</h3>
         </div>
         {% endif %}
 
+        <div class="api-section">
+            <h3>🔌 REST API Endpoints</h3>
+            <code>
+                <span class="endpoint">POST /api/shorten</span> — Shorten a URL<br>
+                <span style="color:#999;">{ "url": "https://...", "custom_code": "my-link" }</span>
+            </code>
+            <code>
+                <span class="endpoint">GET /api/stats/<code></span> — Get analytics for a short URL
+            </code>
+            <code>
+                <span class="endpoint">GET /api/urls</span> — List all URLs with stats
+            </code>
+            <code>
+                <span class="endpoint">GET /qr/<code></span> — Download QR code (PNG)
+            </code>
+        </div>
+
         <div class="footer">
-            Built with Flask 🐍
+            Built with Flask 🐍 • Data stored in <code>urls.json</code>
         </div>
     </div>
 
@@ -199,4 +387,3 @@
     </script>
 </body>
 </html>
-
